@@ -1,8 +1,8 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 
-app = FastAPI()
 
+# frontend
 html = """
 <!DOCTYPE html>
 <html>
@@ -41,6 +41,15 @@ html = """
 """
 
 
+app = FastAPI()
+
+
+@app.get("/")
+async def get():
+    return HTMLResponse(html)
+
+
+# backend
 class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
@@ -62,11 +71,6 @@ class ConnectionManager:
 
 
 manager = ConnectionManager()
-
-
-@app.get("/")
-async def get():
-    return HTMLResponse(html)
 
 
 @app.websocket("/ws/{client_id}")
